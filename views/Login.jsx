@@ -12,9 +12,26 @@ import {
 } from 'react-native';
 import {icons, fontSize, colors} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {isValidEmail, isValidPassword} from '../utilies/Validation';
 
 const Login = props => {
   const [keyboardDidShow, setKeyboardDidShow] = useState(false); // false (bàn phím ko bật), true (đang bật bàn phím)
+  // states for validating
+  const [errorEmail, setErrorEmail] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
+  // states to store email/password
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // check validation email and password
+  const isValidationOK = () => {
+    return (
+      email.length > 0 &&
+      password.length > 0 &&
+      errorEmail.length == 0 &&
+      errorPassword.length == 0
+    );
+  };
 
   //componentDidMount (khi màn hình load hết data thì sẽ chui vào function này)
   useEffect(() => {
@@ -78,11 +95,23 @@ const Login = props => {
             Email:
           </Text>
           <TextInput
+            // onChangeText={}
+            onChangeText={text => {
+              if (isValidEmail(text) == false) {
+                setErrorEmail('Email is not correct format');
+              } else {
+                setErrorEmail('');
+                setEmail(text);
+              }
+            }}
             underlineColorAndroid={'#3D0619'}
             style={{color: 'black', marginTop: -10}}
             placeholder="example@gmail.com"
             placeholderTextColor={colors.placeholder}
           />
+          <Text style={{color: 'red', fontSize: fontSize.h6}}>
+            {errorEmail}
+          </Text>
         </View>
         <View style={{marginTop: 20}}>
           <Text
@@ -94,12 +123,27 @@ const Login = props => {
             Password:
           </Text>
           <TextInput
+            onChangeText={text => {
+              if (isValidPassword(text) == false) {
+                setErrorPassword('Password must be at lease 3 characters');
+              } else {
+                setErrorPassword('');
+                setPassword(text);
+              }
+            }}
             underlineColorAndroid={'#3D0619'}
             style={{color: 'black', marginTop: -10}}
             placeholder="Enter your password"
             placeholderTextColor={colors.placeholder}
             secureTextEntry={true}
           />
+          <Text
+            style={{
+              color: 'red',
+              fontSize: fontSize.h6,
+            }}>
+            {errorPassword}
+          </Text>
         </View>
       </View>
 
@@ -108,15 +152,18 @@ const Login = props => {
         <View style={{flex: 15}}>
           {/* Button login */}
           <TouchableOpacity
+            disabled={isValidationOK() == false} // khi ko thỏa mãn các điều kiện validation thì sẽ ẩn button (disabled = true)
             onPress={() => {
-              alert('Press login!');
+              alert(`Email = ${email}, password = ${password}`);
             }}
             style={{
-              backgroundColor: colors.primary,
+              backgroundColor:
+                isValidationOK() == true ? colors.primary : colors.inactive,
               justifyContent: 'center',
               alignItems: 'center',
               marginHorizontal: 70,
               borderRadius: 20,
+              marginTop: 15,
             }}>
             <Text
               style={{
@@ -149,7 +196,7 @@ const Login = props => {
       )}
 
       {/* Footer */}
-      <View style={{flex: 25}}>
+      <View style={{flex: 25, paddingTop: 20}}>
         {/* Footer - header */}
         <View
           style={{
