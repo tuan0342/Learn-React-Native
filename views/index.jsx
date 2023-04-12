@@ -1,3 +1,5 @@
 import Wellcome from './Wellcome';
 import Login from './Login';
-export {Wellcome, Login};
+import Register from './Register';
+
+export {Wellcome, Login, Register};
