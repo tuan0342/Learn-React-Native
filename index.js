@@ -5,7 +5,7 @@
 import React from 'react';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
-import {Wellcome, Login, Register} from './views/index';
+import {Wellcome, Login, Register, FoodList} from './views/index';
 
 let listProducts = [
   {
@@ -22,4 +22,4 @@ let listProducts = [
   },
 ];
 
-AppRegistry.registerComponent(appName, () => () => <Register />);
+AppRegistry.registerComponent(appName, () => () => <FoodList />);
