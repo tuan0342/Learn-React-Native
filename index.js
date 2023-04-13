@@ -5,7 +5,13 @@
 import React from 'react';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
-import {Wellcome, Login, Register, FoodList} from './views/index';
+import {
+  Wellcome,
+  Login,
+  Register,
+  FoodList,
+  ProductGridView,
+} from './views/index';
 
 let listProducts = [
   {
@@ -22,4 +28,4 @@ let listProducts = [
   },
 ];
 
-AppRegistry.registerComponent(appName, () => () => <FoodList />);
+AppRegistry.registerComponent(appName, () => () => <ProductGridView />);
