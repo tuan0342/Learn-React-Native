@@ -7,9 +7,11 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import FoodItem from './FoodItem';
 import {colors, fontSize} from '../../constants/controlConst';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function FoodList(props) {
   // list of foods = state
@@ -120,13 +122,35 @@ function FoodList(props) {
     },
   ]);
 
+  // search text
+  const [searchText, setSearchText] = useState('');
+
+  // fuction filter foods
+  const filteredFoods = () =>
+    foods.filter(eachFood =>
+      eachFood.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* Filter */}
-      <View style={{height: 60}}></View>
+      <View style={styles.FilterContainer}>
+        <Icon
+          name="search"
+          color={'black'}
+          size={20}
+          style={{position: 'absolute', left: 13}}
+        />
+        <TextInput
+          style={styles.FilterInput}
+          onChangeText={text => {
+            setSearchText(text);
+          }}></TextInput>
+        <Icon name="bars" size={40} color={colors.lighBlack} />
+      </View>
 
       {/* FlatList ngang */}
-      <View style={{height: 80}}>
+      <View style={{height: 100}}>
         <View style={{height: 1, backgroundColor: colors.lighBlack}}></View>
         <FlatList
           style={{flex: 1}}
@@ -138,7 +162,7 @@ function FoodList(props) {
                 onPress={() => {
                   alert(`Press: ${item.name}`);
                 }}
-                style={{justifyContent: 'center', alignItems: 'center'}}>
+                style={styles.FlatListHorizontalTouchableOpacity}>
                 <Image
                   style={styles.FlatListHorizontalImg}
                   source={{uri: item.url}}
@@ -153,36 +177,81 @@ function FoodList(props) {
         <View style={{height: 1, backgroundColor: colors.lighBlack}}></View>
       </View>
 
-      {/* FlatList dọc */}
       {/* <ScrollView>
         {foods.map(eachFood => (
           <FoodItem food={eachFood} key={eachFood.name} />
         ))}
       </ScrollView> */}
-      <FlatList
-        data={foods}
-        keyExtractor={eachFood => eachFood.name}
-        renderItem={({item}) => (
-          <FoodItem
-            onPress={() => {
-              alert(`You pressed item's name: ${item.name}`);
-            }}
-            food={item}
-          />
-        )}
-      />
+
+      {/* FlatList dọc */}
+      {filteredFoods().length > 0 ? (
+        <FlatList
+          data={filteredFoods()}
+          keyExtractor={eachFood => eachFood.name}
+          renderItem={({item}) => (
+            <FoodItem
+              onPress={() => {
+                alert(`You pressed item's name: ${item.name}`);
+              }}
+              food={item}
+            />
+          )}
+        />
+      ) : (
+        <View style={styles.FlatListVerticalNotFoundView}>
+          <Text style={styles.FlatListVerticalNotFoundText}>Not found!</Text>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  FilterContainer: {
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 7,
+  },
+
+  FilterInput: {
+    backgroundColor: '#BFBFBF',
+    paddingVertical: 2,
+    flex: 1,
+    marginHorizontal: 7,
+    fontSize: 17,
+    borderRadius: 5,
+    opacity: 0.8,
+    paddingLeft: 30,
+  },
+
+  FlatListHorizontalTouchableOpacity: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+
   FlatListHorizontalImg: {
     width: 45,
     height: 45,
     resizeMode: 'cover',
     borderRadius: 30,
-    marginHorizontal: 10,
+    marginHorizontal: 13,
     marginTop: 3,
+  },
+
+  FlatListVerticalNotFoundView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 60,
+  },
+
+  FlatListVerticalNotFoundText: {
+    fontSize: fontSize.h1,
+    color: '#AB1313',
+    fontWeight: '600',
   },
 });
 
