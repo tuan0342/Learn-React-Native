@@ -11,6 +11,7 @@ import {
   Register,
   FoodList,
   ProductGridView,
+  Settings,
 } from './views/index';
 
 let listProducts = [
@@ -28,4 +29,4 @@ let listProducts = [
   },
 ];
 
-AppRegistry.registerComponent(appName, () => () => <ProductGridView />);
+AppRegistry.registerComponent(appName, () => () => <Settings />);
