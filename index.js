@@ -13,6 +13,8 @@ import {
   ProductGridView,
   Settings,
 } from './views/index';
+import UITab from './navigation/UITab';
+import MyApp from './navigation/MyApp';
 
 let listProducts = [
   {
@@ -29,4 +31,4 @@ let listProducts = [
   },
 ];
 
-AppRegistry.registerComponent(appName, () => () => <Settings />);
+AppRegistry.registerComponent(appName, () => () => <MyApp />);

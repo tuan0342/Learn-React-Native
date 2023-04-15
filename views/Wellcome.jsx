@@ -24,6 +24,12 @@ function Wellcome(props) {
     },
   ]);
 
+  // navigation
+  const {navigation, route} = props;
+
+  // function of navigate to/back
+  const {navigate, goBack} = navigation;
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -73,6 +79,7 @@ function Wellcome(props) {
         <View style={styles.bodyContent}>
           {accountTypes.map(accountType => (
             <UIButton
+              key={accountType.name}
               onPress={() => {
                 // set sự kiện khi bấm vào button
                 let newAccountType = accountTypes.map(eachAccountType => {
@@ -90,12 +97,17 @@ function Wellcome(props) {
         </View>
 
         <View style={styles.footer}>
-          <UIButton title={'LOGIN'} />
+          <UIButton
+            onPress={() => {
+              navigate('Login');
+            }}
+            title={'LOGIN'}
+          />
           <Text style={styles.footer_info}>Want to register new account?</Text>
           <Text
             style={styles.footer_register}
             onPress={() => {
-              alert('Press register');
+              navigate('Register');
             }}>
             Register
           </Text>

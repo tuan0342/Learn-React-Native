@@ -1,15 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Switch,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, ScrollView, Text, Switch} from 'react-native';
 import {colors, fontSize} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import UIHeader from '../components/UIHeader';

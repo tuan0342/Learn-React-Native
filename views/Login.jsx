@@ -20,8 +20,8 @@ const Login = props => {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   // states to store email/password
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('anhphan0110@gmail.com');
+  const [password, setPassword] = useState('12455');
 
   // check validation email and password
   const isValidationOK = () => {
@@ -32,6 +32,12 @@ const Login = props => {
       errorPassword.length == 0
     );
   };
+
+  // navigation
+  const {navigation, route} = props;
+
+  // function of navigate to/back
+  const {navigate, goBack} = navigation;
 
   //componentDidMount (khi màn hình load hết data thì sẽ chui vào function này)
   useEffect(() => {
@@ -95,7 +101,6 @@ const Login = props => {
             Email:
           </Text>
           <TextInput
-            // onChangeText={}
             onChangeText={text => {
               if (isValidEmail(text) == false) {
                 setErrorEmail('Email is not correct format');
@@ -108,6 +113,7 @@ const Login = props => {
             style={{color: 'black', marginTop: -10}}
             placeholder="example@gmail.com"
             placeholderTextColor={colors.placeholder}
+            value={email}
           />
           <Text style={{color: 'red', fontSize: fontSize.h6}}>
             {errorEmail}
@@ -136,6 +142,7 @@ const Login = props => {
             placeholder="Enter your password"
             placeholderTextColor={colors.placeholder}
             secureTextEntry={true}
+            value={password}
           />
           <Text
             style={{
@@ -154,7 +161,7 @@ const Login = props => {
           <TouchableOpacity
             disabled={isValidationOK() == false} // khi ko thỏa mãn các điều kiện validation thì sẽ ẩn button (disabled = true)
             onPress={() => {
-              alert(`Email = ${email}, password = ${password}`);
+              navigate('UITab');
             }}
             style={{
               backgroundColor:

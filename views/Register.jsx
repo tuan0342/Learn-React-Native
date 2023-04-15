@@ -25,6 +25,12 @@ function Register(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // navigation
+  const {navigation, route} = props;
+
+  // function of navigate to/back
+  const {navigate, goBack} = navigation;
+
   // check validation email and password
   const isValidationOK = () => {
     return (
