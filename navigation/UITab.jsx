@@ -8,7 +8,7 @@ yarn add react-native-screens
  * **/
 
 import React from 'react';
-import {Settings, ProductGridView, FoodList} from '../views';
+import {Settings, ProductGridView, FoodList, Profile} from '../views';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {fontSizes, colors} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 const screenOption = ({route}) => ({
   headerShown: false,
   tabBarActiveTintColor: '#EBEBEB',
-  tabBarInactiveTintColor: '#535353',
+  tabBarInactiveTintColor: '#3B3B3B',
   tabBarStyle: {
     height: 60,
     paddingHorizontal: 5,
@@ -34,18 +34,15 @@ const screenOption = ({route}) => ({
       iconName = 'shopping-cart';
     } else if (route.name === 'FoodList') {
       iconName = 'cutlery';
-    } else {
+    } else if (route.name === 'Settings') {
       iconName = 'cogs';
+    } else {
+      iconName = 'user';
     }
 
     // You can return any component that you like here!
     return (
-      <Icon
-        name={iconName}
-        size={23}
-        style={{paddingRight: 7}}
-        color={focused ? '#EBEBEB' : '#535353'}
-      />
+      <Icon name={iconName} size={23} color={focused ? '#EBEBEB' : '#3B3B3B'} />
     );
   },
 });
@@ -67,6 +64,11 @@ function UITab(props) {
         name={'Settings'}
         component={Settings}
         options={{tabBarLabel: 'Setting'}}
+      />
+      <Tab.Screen
+        name={'Profile'}
+        component={Profile}
+        options={{tabBarLabel: 'Profile'}}
       />
     </Tab.Navigator>
   );
