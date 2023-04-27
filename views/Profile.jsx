@@ -22,6 +22,7 @@ function Profile(props) {
   const [user, setUser] = useState({});
   const [populations, setPopulations] = useState({});
 
+  // Biểu đồ
   const screenWidth = Dimensions.get('window').width - 50;
   const chartConfig = {
     backgroundColor: '#F3DEBA', //F3E99F
@@ -33,6 +34,15 @@ function Profile(props) {
     color: () => '#675D50', //#FF6D60
     labelColor: () => '#675D50',
   };
+  let label = [];
+  let countPeoples = [];
+  for (let i = 0; i < populations.length; i++) {
+    label.push(populations[i].year);
+    countPeoples.push(populations[i].countPeople / 100000);
+  }
+
+  // console.log(label);
+  // console.log(countPeoples);
 
   // called when component loaded => componentDidMount
   useEffect(() => {
@@ -140,20 +150,10 @@ function Profile(props) {
         <Text style={styles.bodyBlockTitle}>US population chart: </Text>
         {/* <LineChart
           data={{
-            labels: () => {
-              let labelsChart = populations.map(item => {
-                return item.year;
-              }); //.soft((a, b) => parseInt(a.year) - parseInt(b.year))
-              return labelsChart;
-            },
+            labels: label,
             datasets: [
               {
-                data: () => {
-                  let dataCharts = populations.map(item => {
-                    return Math.floor(item.countPeople / 1000000, 0);
-                  });
-                  return dataCharts;
-                },
+                data: countPeoples,
               },
             ],
             legend: [`Population in US`],

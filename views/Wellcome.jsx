@@ -4,6 +4,8 @@ import {Image, Text, View, ImageBackground, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, icons, fontSize} from '../constants/controlConst';
 import UIButton from '../components/UIButton';
+import { auth, onAuthStateChanged, firebaseDatabaseRef, firebaseSet, db } from '../firebase/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';  // lưu dữ liệu vào thiết bị
 
 // component = function
 function Wellcome(props) {
@@ -29,6 +31,38 @@ function Wellcome(props) {
 
   // function of navigate to/back
   const {navigate, goBack} = navigation;
+
+  useEffect(() => {
+
+    //  - muốn biết liệu người dùng của mình hiện đang đăng nhập hay đăng xuất khỏi ứng dụng
+    //  - 'onAuthStateChanged' cho phép bạn đăng ký trạng thái xác thực hiện tại của người dùng và nhận một 
+    //  sự kiện bất cứ khi nào trạng thái đó thay đổi
+    onAuthStateChanged(auth, (responseUser) => {
+      // debugger
+      if(responseUser) {
+        // User is signed in, see docs for a list of available properties
+        
+        // Tạo ra đối tượng 'user' bao gồm các trường bên dưới, lấy từ 'responseUser' của firebase
+        // -> lấy đối tượng 'user' vừa tạo ra ghi vào trong firebase theo đường dẫn `users/${user.userId}`
+        let user = {
+            userId: responseUser.uid,
+            email: responseUser.email,
+            emailVerified: responseUser.emailVerified,
+            accessToken: responseUser.accessToken
+        }
+
+        // save data to Firebase
+        // firebaseSet(firebaseDatabaseRef( db, `users/${responseUser.uid}`), user)
+
+        // save user to local storage (file Conversation có gọi lại)
+        AsyncStorage.setItem("user", JSON.stringify(user))   // key: user, value: JSON.stringify(user) 
+
+        navigate('UITab');
+      } else {
+        // User is signed out
+      }
+    })
+  })
 
   return (
     <View style={styles.container}>

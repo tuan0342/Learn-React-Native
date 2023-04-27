@@ -15,6 +15,7 @@ import {icons, fontSize, colors} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {isValidEmail, isValidPassword} from '../utilies/Validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { auth, onAuthStateChanged, firebaseDatabaseRef, firebaseSet, db, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase/firebase';
 
 function Register(props) {
   const [keyboardDidShow, setKeyboardDidShow] = useState(false); // false (bàn phím ko bật), true (đang bật bàn phím)
@@ -22,12 +23,12 @@ function Register(props) {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   // states to store email/password
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('anhphan0110@gmail.com');
+  const [password, setPassword] = useState('123456Abc');
+  const [retypePassword, setretypePassword] = useState('123456Abc');
 
   // navigation
   const {navigation, route} = props;
-
   // function of navigate to/back
   const {navigate, goBack} = navigation;
 
@@ -37,7 +38,8 @@ function Register(props) {
       email.length > 0 &&
       password.length > 0 &&
       errorEmail.length == 0 &&
-      errorPassword.length == 0
+      errorPassword.length == 0 &&
+      password == retypePassword
     );
   };
 
@@ -52,6 +54,8 @@ function Register(props) {
     Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardDidShow(false);
     });
+
+    // const xx = auth
   });
 
   return (
@@ -115,6 +119,7 @@ function Register(props) {
               Email:
             </Text>
             <TextInput
+              value={email}
               onChangeText={text => {
                 if (isValidEmail(text) == false) {
                   setErrorEmail('Email is not correct format');
@@ -143,6 +148,7 @@ function Register(props) {
               Password:
             </Text>
             <TextInput
+              value={password}
               onChangeText={text => {
                 if (isValidPassword(text) == false) {
                   setErrorPassword('Password must be at lease 3 characters');
@@ -176,12 +182,13 @@ function Register(props) {
               Retype password:
             </Text>
             <TextInput
+              value={retypePassword}
               onChangeText={text => {
                 if (isValidPassword(text) == false) {
                   setErrorPassword('Password must be at lease 3 characters');
                 } else {
                   setErrorPassword('');
-                  setPassword(text);
+                  setretypePassword(text);
                 }
               }}
               underlineColorAndroid={'#3D0619'}
@@ -202,7 +209,29 @@ function Register(props) {
           <TouchableOpacity
             disabled={isValidationOK() == false} // khi ko thỏa mãn các điều kiện validation thì sẽ ẩn button (disabled = true)
             onPress={() => {
-              alert(`Email = ${email}, password = ${password}`);
+              createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                  // Signed in 
+                  const user = userCredential.user;  // tạo user
+                  
+                  // gửi verifycation email
+                  sendEmailVerification(user).then(() => {
+                    console.log(`Sent email verification`)
+                  })
+                  
+                  // cập nhật realtime user
+                  // firebaseSet(firebaseDatabaseRef( db, `users/${user.uid}`), {  
+                  //     // các giá trị lưu trong bảng
+                  //     email: user.email,
+                  //     emailVerified: user.emailVerified,
+                  //     accessToken: user.accessToken
+                  // })
+                  
+                  navigate('UITab')  // đăng kí thành công thì chuyển sang UITabs
+                })
+                .catch((error) => {
+                  alert(`Can not register, error: ${error.message}`)
+                });
             }}
             style={{
               backgroundColor:

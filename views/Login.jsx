@@ -13,6 +13,12 @@ import {
 import {icons, fontSize, colors} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {isValidEmail, isValidPassword} from '../utilies/Validation';
+import { 
+  auth, onAuthStateChanged, firebaseDatabaseRef, 
+  firebaseSet, db, createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, sendEmailVerification 
+} from '../firebase/firebase';
+
 
 const Login = props => {
   const [keyboardDidShow, setKeyboardDidShow] = useState(false); // false (bàn phím ko bật), true (đang bật bàn phím)
@@ -21,7 +27,7 @@ const Login = props => {
   const [errorPassword, setErrorPassword] = useState('');
   // states to store email/password
   const [email, setEmail] = useState('anhphan0110@gmail.com');
-  const [password, setPassword] = useState('12455');
+  const [password, setPassword] = useState('123456Abc');
 
   // check validation email and password
   const isValidationOK = () => {
@@ -157,10 +163,32 @@ const Login = props => {
       {/* Button (gồm login và register)*/}
       {keyboardDidShow == false && (
         <View style={{flex: 15}}>
+
           {/* Button login */}
           <TouchableOpacity
             disabled={isValidationOK() == false} // khi ko thỏa mãn các điều kiện validation thì sẽ ẩn button (disabled = true)
             onPress={() => {
+              // lưu thông tin đăng nhập vào database
+              signInWithEmailAndPassword(auth, email, password)
+                  .then((userCredential) => {
+                      // Signed in 
+                      const user = userCredential.user;  // tạo user
+
+                      // cập nhật realtime user
+                      firebaseSet(firebaseDatabaseRef( db, `users/${user.uid}`), {  
+                          // các giá trị lưu trong bảng
+                          userId: user.uid,
+                          email: user.email,
+                          emailVerified: user.emailVerified,
+                          accessToken: user.accessToken
+                      })
+                      
+                      navigate('UITab')  // đăng kí thành công thì chuyển sang UITabs
+                  })
+                  .catch((error) => {
+                      alert(`Can not register, error: ${error.message}`)
+                  });
+
               navigate('UITab');
             }}
             style={{
@@ -172,6 +200,7 @@ const Login = props => {
               borderRadius: 20,
               marginTop: 15,
             }}>
+
             <Text
               style={{
                 padding: 9,

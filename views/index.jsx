@@ -5,6 +5,7 @@ import FoodList from './FoodList/FoodList';
 import ProductGridView from './ProductGrid/ProductGridView';
 import Settings from './Setting';
 import Profile from './Profile';
+import {Chat} from './Chats/Chat';
 
 export {
   Wellcome,
@@ -14,4 +15,5 @@ export {
   ProductGridView,
   Settings,
   Profile,
+  Chat,
 };

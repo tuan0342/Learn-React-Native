@@ -8,7 +8,7 @@ yarn add react-native-screens
  * **/
 
 import React from 'react';
-import {Settings, ProductGridView, FoodList, Profile} from '../views';
+import {Settings, ProductGridView, FoodList, Profile, Chat} from '../views';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {fontSizes, colors} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,6 +34,8 @@ const screenOption = ({route}) => ({
       iconName = 'shopping-cart';
     } else if (route.name === 'FoodList') {
       iconName = 'cutlery';
+    } else if (route.name === 'Chat') {
+      iconName = 'comment';
     } else if (route.name === 'Settings') {
       iconName = 'cogs';
     } else {
@@ -42,7 +44,7 @@ const screenOption = ({route}) => ({
 
     // You can return any component that you like here!
     return (
-      <Icon name={iconName} size={23} color={focused ? '#EBEBEB' : '#3B3B3B'} />
+      <Icon name={iconName} size={27} color={focused ? '#EBEBEB' : '#3B3B3B'} />
     );
   },
 });
@@ -59,6 +61,11 @@ function UITab(props) {
         name={'FoodList'}
         component={FoodList}
         options={{tabBarLabel: 'Foods'}}
+      />
+      <Tab.Screen
+        name={'Chat'}
+        component={Chat}
+        options={{tabBarLabel: 'Message'}}
       />
       <Tab.Screen
         name={'Settings'}

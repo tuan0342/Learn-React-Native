@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Wellcome, Login, Register} from '../views';
 import UITab from './UITab';
+import {Conversation} from '../views/Conversation/Conversation';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ function MyApp(props) {
         <Stack.Screen name={'Login'} component={Login} />
         <Stack.Screen name={'Register'} component={Register} />
         <Stack.Screen name={'UITab'} component={UITab} />
+        <Stack.Screen name={'Conversation'} component={Conversation} />
       </Stack.Navigator>
     </NavigationContainer>
   );

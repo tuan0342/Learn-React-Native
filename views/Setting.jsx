@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {View, ScrollView, Text, Switch} from 'react-native';
+import {View, ScrollView, Text, Switch, TouchableOpacity} from 'react-native';
 import {colors, fontSize} from '../constants/controlConst';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import UIHeader from '../components/UIHeader';
+import { auth, db, firebaseDatabaseRef } from '../firebase/firebase';
+import { StackActions } from '@react-navigation/native'
 
 function Settings(props) {
   const [isEnabledLockApp, setIsEnabledLockApp] = useState(false);
@@ -14,6 +16,11 @@ function Settings(props) {
     setIsEnabledFingerprint(previousValue => !previousValue);
   const toggleSwitchPassword = () =>
     setIsEnabledPassword(previousValue => !previousValue);
+
+  // navigation
+  const {navigation, route} = props;
+  // function of navigate to/back
+  const {navigate, goBack} = navigation;
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -141,7 +148,12 @@ function Settings(props) {
               style={{marginHorizontal: 3, marginRight: 10, marginLeft: 'auto'}}
             />
           </View>
-          <View style={{flexDirection: 'row', marginVertical: 7}}>
+          <TouchableOpacity 
+              onPress={() => {
+                auth.signOut();
+                navigation.dispatch(StackActions.popToTop())  // đưa về màn hình đầu tiên trong ngăn xếp
+              }} 
+              style={{flexDirection: 'row', paddingVertical: 7}}>
             <Icon
               name="sign-out"
               size={20}
@@ -155,7 +167,7 @@ function Settings(props) {
               color={'#9A9A9A'}
               style={{marginHorizontal: 3, marginRight: 10, marginLeft: 'auto'}}
             />
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* ScrollView block */}
